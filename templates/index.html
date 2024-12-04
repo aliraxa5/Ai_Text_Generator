@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Text Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            background-color: #ffffff;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        #prompt {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            color: #333333;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            font-size: 14px;
+            color: #333333;
+            outline: none;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #444444;
+        }
+
+        p#response {
+            background-color: #f9f9f9;
+            border: 1px solid #cccccc;
+            padding: 10px;
+            border-radius: 5px;
+            color: #555555;
+            font-size: 14px;
+            text-align: left;
+            white-space: pre-wrap;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>AI Text Generator</h1>
+        <form id="prompt-form">
+            <textarea id="prompt" placeholder="Enter your prompt here"></textarea><br>
+            <select id="api_choice">
+                <option value="openai">OpenAI</option>
+                <option value="claude">Claude</option>
+            </select><br>
+            <button type="button" onclick="generateText()">Generate</button>
+        </form>
+        <h2>Response:</h2>
+        <p id="response">No response yet...</p>
+    </div>
+
+    <script>
+        async function generateText() {
+            const prompt = document.getElementById("prompt").value;
+            const api_choice = document.getElementById("api_choice").value;
+
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, api_choice })
+            });
+            const data = await response.json();
+            document.getElementById("response").innerText = data.response || "Error: " + data.error;
+        }
+    </script>
+</body>
+</html>
